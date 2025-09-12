@@ -1,0 +1,19 @@
+{
+  "name": "cs360-assignment-1",
+  "version": "1.0.0",
+  "description": "CS360 Assignment 1 project",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node ./dist/index.js",
+    "dev": "ts-node ./src/index.ts"
+  },
+  "keywords": [],
+  "author": "Azamat E. Zakirovch",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.7.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}
