@@ -1,0 +1,42 @@
+[
+  {
+    "student": {
+      "studentID": 230001,
+      "studentName": "Sherzod"
+    },
+    "grades": [
+      { "course": "Mathematics", "grade": 95 },
+      { "course": "Physics", "grade": 88 }
+    ]
+  },
+  {
+    "student": {
+      "studentID": 230002,
+      "studentName": "Laylo"
+    },
+    "grades": [
+      { "course": "Algorithms & Data Structure", "grade": 78 },
+      { "course": "OOP", "grade": 85 }
+    ]
+  },
+  {
+    "student": {
+      "studentID": 230003,
+      "studentName": "Olimjon"
+    },
+    "grades": [
+      { "course": "Operating Systems", "grade": 67 },
+      { "course": "Mobile Programming", "grade": 85 }
+    ]
+  },
+  {
+    "student": {
+      "studentID": 230055,
+      "studentName": "Azamat"
+    },
+    "grades": [
+      { "course": "Operating Systems", "grade": 80 },
+      { "course": "Introduction to Software Engineering", "grade": 94 }
+    ]
+  }
+]
