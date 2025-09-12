@@ -8,14 +8,14 @@ It allows you to perform **CRUD operations** (Create, Read, Update, Delete) on s
 
 ## Project Structure
 
-cs360-assignment-1/ \n
-├── data.json # Mini database storing student transcripts \n
-├── .gitignore # Ignore unnecessary files for GitHub \n
-├── package.json # Project metadata, dependencies, and scripts \n
-├── tsconfig.json # TypeScript compilation settings \n
-└── src/ \n
-├── index.ts # Main entry point \n
-└── TranscriptManager.ts # Module for managing transcripts \n
+cs360-assignment-1/
+├── data.json # Mini database storing student transcripts
+├── .gitignore # Ignore unnecessary files for GitHub
+├── package.json # Project metadata, dependencies, and scripts
+├── tsconfig.json # TypeScript compilation settings
+└── src/
+├── index.ts # Main entry point
+└── TranscriptManager.ts # Module for managing transcripts
 
 
 ---
