@@ -10,7 +10,15 @@ export class TranscriptManager {
     constructor(){}
 
     private loadData(): Transcript[] {
-        return []
+
+        if(!fs.existsSync(database)){
+            console.log("The database does not exist");
+            return [];
+        }
+
+        const data = fs.readFileSync(database, "utf-8");
+
+        return JSON.parse(data);
     }
 
     public initialize(): void{}
