@@ -1,81 +1,135 @@
 import * as fs from "fs";
-import {Transcript, Course, CourseGrade, StudentID, Student} from "./types";
+import { Transcript, Student, StudentID, Course, CourseGrade } from "./types";
 
-const database = "./data.json";
+const DATA_FILE = "./data.json";
 
 export class TranscriptManager {
-
     private transcripts: Transcript[];
 
-    constructor(){
+    constructor() {
         this.transcripts = this.loadData();
     }
 
     private loadData(): Transcript[] {
-
-        if(!fs.existsSync(database)){
-            console.log("The database does not exist");
+        if (!fs.existsSync(DATA_FILE)) {
+            console.log("No data file found, starting with empty list...");
             return [];
         }
-
-        const data = fs.readFileSync(database, "utf-8");
-
-        return JSON.parse(data);
+        const fileContent = fs.readFileSync(DATA_FILE, "utf-8");
+        return JSON.parse(fileContent);
     }
 
-    public initialize(): void{
-        if(this.transcripts.length > 0){
-            console.log("Initializing Transcript");
+    public debugPrint(): void {
+        console.log(this.transcripts);
+    }
+
+    public initialize(): void {
+        if (this.transcripts.length > 0) {
+            console.log("Database already initialized, skipping...");
+            return; // just exit, don't overwrite existing data
         }
 
         this.transcripts = [
             {
-                student:{studentID:230001, studentName: "Sherzod"},
+                student: { studentID: 230001, studentName: "Sherzod" },
                 grades: []
             },
             {
-                student:{studentID:230002, studentName: "Olimjon"},
+                student: { studentID: 230002, studentName: "Laylo" },
                 grades: []
             },
             {
-                student:{studentID:230003, studentName: "Leyla"},
+                student: { studentID: 230003, studentName: "Olimjon" },
                 grades: []
             },
             {
-                student:{studentID:230004, studentName: "Umarjon"},
+                student: { studentID: 230004, studentName: "Azamat" },
                 grades: []
             }
-        ]
-        this.saveData()
-        console.log("The Database initialized with 4 students");
+        ];
+
+        this.saveData();
+        console.log("Database initialized with 4 students.");
     }
 
-    private saveData():void{
-        const jsonData = JSON.stringify(this.transcripts, null);
-        fs.writeFileSync(database, jsonData,"utf-8");
+    private saveData(): void {
+        const jsonData = JSON.stringify(this.transcripts, null, 2);
+        fs.writeFileSync(DATA_FILE, jsonData, "utf-8");
     }
 
-    public getAll(): Transcript[]{
+    public getAll(): Transcript[] {
         return this.transcripts;
     }
 
-    public addStudent(name: string):number{
+    public addStudent(name: string): number {
         const newID =
-            this.transcripts.length > 0 ? Math.max(...this.transcripts.map((t) => t.student.studentID)) + 1:230001;
+            this.transcripts.length > 0
+                ? Math.max(...this.transcripts.map((t) => t.student.studentID)) + 1
+                : 230000;
 
-        const newStudent: Student = {studentID: newID, studentName: name};
-        this.transcripts.push({student:newStudent, grades: []});
+        const newStudent: Student = { studentID: newID, studentName: name };
+        this.transcripts.push({ student: newStudent, grades: [] });
+
         this.saveData();
         return newID;
     }
 
-    public deleteStudent(studentID:string):void{
-
+    public getTranscript(studentID: number): Transcript | undefined {
+        return this.transcripts.find(t => t.student.studentID === studentID);
     }
 
-    public addGrade(studentID: StudentID, course: Course, grade : number):void{}
-
-    public getGrade(studentId: StudentID, course: Course):number{
-        return 1
+    public getStudentIDs(studentName: string): StudentID[] {
+        return this.transcripts
+            .filter(t => t.student.studentName === studentName)
+            .map(t => t.student.studentID);
     }
+
+    public deleteStudent(studentID: StudentID): void {
+        const index = this.transcripts.findIndex(t => t.student.studentID === studentID);
+
+        if (index === -1) {
+            throw new Error(`No student found with ID ${studentID}`);
+        }
+
+        this.transcripts.splice(index, 1);
+        this.saveData();
+    }
+
+    public addGrade(studentID: StudentID, course: Course, grade: number): void {
+        const transcript = this.transcripts.find(t => t.student.studentID === studentID);
+
+        if (!transcript) {
+            throw new Error(`No student found with ID ${studentID}`);
+        }
+
+        const existingGrade = transcript.grades.find(g => g.course === course);
+        if (existingGrade) {
+            throw new Error(
+                `Student with ID ${studentID} already has a grade for ${course}`
+            );
+        }
+
+        transcript.grades.push({ course, grade });
+
+        this.saveData();
+    }
+
+    public getGrade(studentID: StudentID, course: Course): number {
+        const transcript = this.transcripts.find(t => t.student.studentID === studentID);
+
+        if (!transcript) {
+            throw new Error(`No student found with ID ${studentID}`);
+        }
+
+        const gradeEntry = transcript.grades.find(g => g.course === course);
+        if (!gradeEntry) {
+            throw new Error(
+                `No grade found for course "${course}" for student with ID ${studentID}`
+            );
+        }
+
+        return gradeEntry.grade;
+    }
+
+
 }
